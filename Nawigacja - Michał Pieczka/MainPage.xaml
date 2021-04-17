@@ -1,0 +1,46 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Nawigacja___Michał_Pieczka"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Custom="using:Windows.UI.Xaml.Controls.Maps"
+    xmlns:maps="using:Windows.UI.Xaml.Controls.Maps"
+    x:Class="Nawigacja___Michał_Pieczka.MainPage"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Padding="10" Orientation="Vertical">
+            <TextBlock Text="NAWIGATOR"/>
+            <TextBlock Text="MAPA" FontSize="30" FontWeight="Bold"/>
+        </StackPanel>
+
+        <maps:MapControl Grid.Row="1" x:Name="mojaMapa" MapServiceToken="WSzXfGJSqU23lDagPb9q~vlhG44ChUeUbz1o5b4w0ug~AgFCzJjMMY-8uHcbNbH8NvElE5tvGbKq_Y7Q6AhjdXVGzC1FqBeeucAgtR9qL7BL"/>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Page>
+                <StackPanel Orientation="Horizontal">
+                    <AppBarButton Icon="Add" Label="powiększ" Click="powMapa_Click"/>
+                    <AppBarButton Icon="Remove" Label="zmniejsz" Click="pomMapa_click"/>
+                    <AppBarButton Label="satelita" Click="trybMapy_click">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="S" FontFamily="auto"/>
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarSeparator/>
+                    <AppBarButton Icon="Globe" Label="koordynaty" Click="koordynaty_Click"/>
+                </StackPanel>
+            </Page>
+        </StackPanel>
+
+
+
+    </Grid>
+</Page>
