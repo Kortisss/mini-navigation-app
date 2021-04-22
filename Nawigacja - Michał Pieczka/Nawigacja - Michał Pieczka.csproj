@@ -119,6 +119,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DaneGeograficzne.cs" />
     <Compile Include="Koordynaty.xaml.cs">
       <DependentUpon>Koordynaty.xaml</DependentUpon>
     </Compile>

@@ -20,26 +20,27 @@
             <TextBlock Text="Koordynaty" FontSize="30" FontWeight="Bold"/>
         </StackPanel>
 
-        <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center">
-            <TextBlock Text="GPS: moje położenie" TextAlignment="Center"/>
-            <Border Background="AliceBlue">
-                <TextBlock Name="tbGPS" Text="***" Foreground="Red" TextAlignment="Center"/>
+        <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center" Margin="0 10 0 0 ">
+            <TextBlock Text="GPS: moje położenie"/>
+            <Border Background="AliceBlue" Margin="0 0 0 20">
+                <TextBlock  Name="tbGPS" Text="***" Foreground="Red" TextAlignment="Center"/>
             </Border>
-            
-                
+            <TextBox Name="tbCel" Header="Podaj adres celu:"/>
+            <StackPanel Background="AliceBlue" Padding="10">
+                <TextBlock Text="Wyznaczone współrzędne geograficzne:"/>
+                <TextBlock  Name="tbDlug_cel" Text="długość geograficzna:" Foreground="ForestGreen"/>
+                <TextBlock  Name="tbSzer_cel" Text="szerokość geograficzna:" Foreground="ForestGreen"/>
+            </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <Page>
                 <StackPanel Orientation="Horizontal">
-                    <AppBarButton Name="btnPowrot" Icon="Add" Label="Powrót" Click="btnPowrot_Click"/>
-                    <AppBarButton/>
+                    <AppBarButton Name="btnPowrot" MinWidth="200" Icon="Back" Label="Powrót" Click="btnPowrot_Click"/>
                     <AppBarSeparator/>
-                    <AppBarButton/>
-                    <AppBarButton Icon="Globe" Label="szukaj"/>
+                    <AppBarButton Name="btnSzukaj" Icon="Find" MinWidth="200" Label="szukaj" Click="btnSzukaj_Click"/>
                 </StackPanel>
             </Page>
         </StackPanel>
-
     </Grid>
 </Page>

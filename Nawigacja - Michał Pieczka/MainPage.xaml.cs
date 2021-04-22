@@ -14,6 +14,10 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Controls.Maps;
 using Windows.UI.Xaml.Navigation;
 
+using Windows.Devices.Geolocation;
+using Windows.Services.Maps;
+using Windows.ApplicationModel.Core;
+
 //Szablon elementu Pusta strona jest udokumentowany na stronie https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x415
 
 namespace Nawigacja___Michał_Pieczka
@@ -26,6 +30,46 @@ namespace Nawigacja___Michał_Pieczka
         public MainPage()
         {
             this.InitializeComponent();
+        }
+
+        async protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            if (DaneGeograficzne.pktStartowy.Latitude != 0 && DaneGeograficzne.pktDocelowy.Longitude != 0)
+            {
+                Geopoint pktStartowy = new Geopoint(DaneGeograficzne.pktStartowy);
+                Geopoint pktDocelowy = new Geopoint(DaneGeograficzne.pktDocelowy);
+
+                MapIcon znacznikStart = new MapIcon();
+                znacznikStart.Location = pktStartowy;
+                znacznikStart.Title = "Tu jestem";
+
+                MapIcon znacznikDocelowa = new MapIcon();
+                znacznikDocelowa.Location = pktDocelowy;
+                znacznikDocelowa.Title = "Koniec!";
+
+                MapPolyline trasaLotem = new MapPolyline();
+                trasaLotem.StrokeColor = Windows.UI.Colors.Black;
+                trasaLotem.StrokeThickness = 3;
+                trasaLotem.StrokeDashed = true;
+
+                var Path = new Geopath(new List<BasicGeoposition>{
+                    DaneGeograficzne.pktStartowy,
+                    DaneGeograficzne.pktDocelowy
+                });
+
+                mojaMapa.MapElements.Add(znacznikStart);
+                mojaMapa.MapElements.Add(znacznikDocelowa);
+                mojaMapa.MapElements.Add(trasaLotem);
+
+                mojaMapa.Center = pktStartowy;
+
+                await mojaMapa.TrySetViewAsync(new Geopoint(DaneGeograficzne.pktStartowy), 8);
+
+            }
+            else
+            {
+                //CoreApplication.Exit();
+            }
         }
 
         private void powMapa_Click(object sender, RoutedEventArgs e)
@@ -65,5 +109,8 @@ namespace Nawigacja___Michał_Pieczka
         {
             Frame.Navigate(typeof(Koordynaty));
         }
+
+
+        
     }
 }
