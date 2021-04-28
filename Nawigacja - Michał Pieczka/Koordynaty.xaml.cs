@@ -50,6 +50,9 @@ namespace Nawigacja___Michał_Pieczka
             pktStart.Longitude = mojeZGPS.Coordinate.Point.Position.Longitude;
             DaneGeograficzne.pktStartowy = pktStart;
 
+            DaneGeograficzne.pktStartLatitude = mojeZGPS.Coordinate.Point.Position.Latitude;
+            DaneGeograficzne.pktStartLongitude = mojeZGPS.Coordinate.Point.Position.Longitude;
+
             tbGPS.Text = "długość: " + mojeZGPS.Coordinate.Point.Position.Longitude.ToString() + "; szerokosc: " + mojeZGPS.Coordinate.Point.Position.Latitude.ToString();
         }
         async private void btnSzukaj_Click(object sender, RoutedEventArgs e)
@@ -68,6 +71,8 @@ namespace Nawigacja___Michał_Pieczka
                 pktKoniec.Longitude = dl_geogr;
 
                 DaneGeograficzne.pktDocelowy = pktKoniec;
+                DaneGeograficzne.pktKoniecLatitude = result.Locations[0].Point.Position.Latitude;
+                DaneGeograficzne.pktKoniecLongitude = result.Locations[0].Point.Position.Longitude;
 
                 if (result.Status == MapLocationFinderStatus.Success)
                 {

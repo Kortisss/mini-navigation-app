@@ -23,6 +23,9 @@
         </StackPanel>
 
         <maps:MapControl Grid.Row="1" x:Name="mojaMapa" MapServiceToken="WSzXfGJSqU23lDagPb9q~vlhG44ChUeUbz1o5b4w0ug~AgFCzJjMMY-8uHcbNbH8NvElE5tvGbKq_Y7Q6AhjdXVGzC1FqBeeucAgtR9qL7BL"/>
+        <StackPanel Padding="5" Grid.Row="1" Orientation="Vertical">
+            <TextBlock Name="tbLegendaDlugosc" Text="" FontWeight="Bold"/>
+        </StackPanel>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <Page>

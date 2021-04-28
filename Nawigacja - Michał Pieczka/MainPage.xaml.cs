@@ -10,6 +10,7 @@ using Windows.Devices.Geolocation;
 using GeoCoordinatePortable;
 using Windows.Services.Maps;
 using Windows.UI;
+using Windows.Foundation;
 
 //Szablon elementu Pusta strona jest udokumentowany na stronie https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x415
 
@@ -25,18 +26,25 @@ namespace Nawigacja___Michał_Pieczka
             this.InitializeComponent();
         }
 
+
         async protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (DaneGeograficzne.pktStartowy.Latitude != 0 && DaneGeograficzne.pktDocelowy.Longitude != 0)
             {
+                Point anchor = new Point();
+                anchor.X = 0.5;
+                anchor.Y = 1.0;
+
                 Geopoint pktStartowy = new Geopoint(DaneGeograficzne.pktStartowy);
                 Geopoint pktDocelowy = new Geopoint(DaneGeograficzne.pktDocelowy);
 
                 MapIcon znacznikStart = new MapIcon();
+                znacznikStart.NormalizedAnchorPoint = anchor;
                 znacznikStart.Location = pktStartowy;
                 znacznikStart.Title = "Tu jestem";
 
                 MapIcon znacznikDocelowa = new MapIcon();
+                znacznikDocelowa.NormalizedAnchorPoint = anchor;
                 znacznikDocelowa.Location = pktDocelowy;
                 znacznikDocelowa.Title = "Koniec!";
 
@@ -57,9 +65,13 @@ namespace Nawigacja___Michał_Pieczka
                 GeoCoordinate pin2 = new GeoCoordinate(DaneGeograficzne.pktDocelowy.Latitude, DaneGeograficzne.pktDocelowy.Longitude);
 
                 double distanceBetween = pin1.GetDistanceTo(pin2) / 1000;
-                
+
+                BasicGeoposition srodekTrasaLotem = new BasicGeoposition();
+                srodekTrasaLotem.Latitude = (DaneGeograficzne.pktStartLatitude + DaneGeograficzne.pktKoniecLatitude) / 2;
+                srodekTrasaLotem.Longitude =(DaneGeograficzne.pktStartLongitude + DaneGeograficzne.pktKoniecLongitude) / 2;
+
                 MapIcon znacznikDystans = new MapIcon();
-                znacznikDystans.Location = pktDocelowy;
+                znacznikDystans.Location = new Geopoint(srodekTrasaLotem);
                 znacznikDystans.Title = string.Format("{0} km", Math.Round(distanceBetween, 2));
 
                 mojaMapa.MapElements.Add(znacznikStart);
@@ -79,8 +91,17 @@ namespace Nawigacja___Michał_Pieczka
 
                 if (routeResult.Status == MapRouteFinderStatus.Success)
                 {
+                    System.Text.StringBuilder routeInfo = new System.Text.StringBuilder();
+                    double estTime = Math.Round(routeResult.Route.EstimatedDuration.TotalMinutes, 2);
+                    routeInfo.Append("Dojazd samochodem:\n\t");
+                    routeInfo.Append("Oszacowany czas dojazdu samochodem (min) = ");
+                    routeInfo.Append(estTime.ToString());
+                    routeInfo.Append("\n\tDługość trasy (km) = ");
+                    routeInfo.Append((routeResult.Route.LengthInMeters / 1000).ToString());
+
                     // Use the route to initialize a MapRouteView.
                     MapRouteView viewOfRoute = new MapRouteView(routeResult.Route);
+                    tbLegendaDlugosc.Text = routeInfo.ToString();
                     viewOfRoute.RouteColor = Colors.Yellow;
                     viewOfRoute.OutlineColor = Colors.Black;
 
@@ -92,7 +113,7 @@ namespace Nawigacja___Michał_Pieczka
                     await mojaMapa.TrySetViewBoundsAsync(
                           routeResult.Route.BoundingBox,
                           null,
-                          Windows.UI.Xaml.Controls.Maps.MapAnimationKind.None);
+                          Windows.UI.Xaml.Controls.Maps.MapAnimationKind.Bow);
                 }
             }
             else

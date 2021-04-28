@@ -13,5 +13,8 @@ namespace Nawigacja___Michał_Pieczka
     {
         public static BasicGeoposition pktStartowy, pktDocelowy;
         public static string opisCelu = null;
+
+        public static double pktStartLatitude, pktStartLongitude;
+        public static double pktKoniecLatitude, pktKoniecLongitude;
     }
 }
