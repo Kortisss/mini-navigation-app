@@ -1,22 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Controls.Maps;
 using Windows.UI.Xaml.Navigation;
 
 using Windows.Devices.Geolocation;
+using GeoCoordinatePortable;
 using Windows.Services.Maps;
-using Windows.ApplicationModel.Core;
+using Windows.UI;
 
 //Szablon elementu Pusta strona jest udokumentowany na stronie https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x415
 
@@ -47,6 +40,8 @@ namespace Nawigacja___Michał_Pieczka
                 znacznikDocelowa.Location = pktDocelowy;
                 znacznikDocelowa.Title = "Koniec!";
 
+                
+
                 MapPolyline trasaLotem = new MapPolyline();
                 trasaLotem.StrokeColor = Windows.UI.Colors.Black;
                 trasaLotem.StrokeThickness = 3;
@@ -56,15 +51,49 @@ namespace Nawigacja___Michał_Pieczka
                     DaneGeograficzne.pktStartowy,
                     DaneGeograficzne.pktDocelowy
                 });
+                trasaLotem.Path = Path;
+
+                GeoCoordinate pin1 = new GeoCoordinate(DaneGeograficzne.pktStartowy.Latitude, DaneGeograficzne.pktStartowy.Longitude);
+                GeoCoordinate pin2 = new GeoCoordinate(DaneGeograficzne.pktDocelowy.Latitude, DaneGeograficzne.pktDocelowy.Longitude);
+
+                double distanceBetween = pin1.GetDistanceTo(pin2) / 1000;
+                
+                MapIcon znacznikDystans = new MapIcon();
+                znacznikDystans.Location = pktDocelowy;
+                znacznikDystans.Title = string.Format("{0} km", Math.Round(distanceBetween, 2));
 
                 mojaMapa.MapElements.Add(znacznikStart);
                 mojaMapa.MapElements.Add(znacznikDocelowa);
                 mojaMapa.MapElements.Add(trasaLotem);
-
+                mojaMapa.MapElements.Add(znacznikDystans);
                 mojaMapa.Center = pktStartowy;
 
                 await mojaMapa.TrySetViewAsync(new Geopoint(DaneGeograficzne.pktStartowy), 8);
 
+                MapRouteFinderResult routeResult =
+                 await MapRouteFinder.GetDrivingRouteAsync(
+                 new Geopoint(DaneGeograficzne.pktStartowy),
+                 new Geopoint(DaneGeograficzne.pktDocelowy),
+                 MapRouteOptimization.Time,
+                 MapRouteRestrictions.None);
+
+                if (routeResult.Status == MapRouteFinderStatus.Success)
+                {
+                    // Use the route to initialize a MapRouteView.
+                    MapRouteView viewOfRoute = new MapRouteView(routeResult.Route);
+                    viewOfRoute.RouteColor = Colors.Yellow;
+                    viewOfRoute.OutlineColor = Colors.Black;
+
+                    // Add the new MapRouteView to the Routes collection
+                    // of the MapControl.
+                    mojaMapa.Routes.Add(viewOfRoute);
+
+                    // Fit the MapControl to the route.
+                    await mojaMapa.TrySetViewBoundsAsync(
+                          routeResult.Route.BoundingBox,
+                          null,
+                          Windows.UI.Xaml.Controls.Maps.MapAnimationKind.None);
+                }
             }
             else
             {

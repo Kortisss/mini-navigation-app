@@ -54,7 +54,6 @@ namespace Nawigacja___Michał_Pieczka
         }
         async private void btnSzukaj_Click(object sender, RoutedEventArgs e)
         {
-            
             var textCelu = tbCel.Text;
             if (textCelu != "")
             {
